@@ -43,7 +43,8 @@ Wed, 02 Mar 2022 09:36:55 GMT+08:00
 x-ca-key:123123
 x-ca-nonce:10000
 x-ca-timestamp:1646182350909
-/sign?age=12&name=xiaowang&qq&query=w&sex=0";
+/sign?age=12&name=xiaowang&qq&query=w&sex=0
+";
         Assert.AreEqual(signature.Replace("\r", ""), signatureText.ToString());
     }
 
@@ -77,7 +78,8 @@ Wed, 02 Mar 2022 09:36:55 GMT+08:00
 x-ca-key:123123
 x-ca-nonce:10000
 x-ca-timestamp:1646182350909
-/sign?query=w";
+/sign?query=w
+";
         Assert.AreEqual(signature.Replace("\r", ""), signatureText.ToString());
     }
 }

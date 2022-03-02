@@ -32,9 +32,12 @@ public class SignatureHeaderGeneratorTest
             }
         };
         var headerGenerator = new SignatureHeaderGenerator();
-        if (headerGenerator.TryGetSignatureHeader(model, result, out var text))
+        if (headerGenerator.TryGetSignatureHeader(model, result, out var header))
         {
-            Assert.IsTrue(text.IsSuccess);
+            Assert.AreEqual(header.Key, "123123");
+            Assert.AreEqual(header.Nonce, "1002");
+            Assert.AreEqual(header.Timestamp, 1646182350909);
+            Assert.IsTrue(header.IsSuccess);
         }
     }
 }

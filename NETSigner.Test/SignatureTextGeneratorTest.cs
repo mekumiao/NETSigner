@@ -28,6 +28,7 @@ public class SignatureTextGeneratorTest
                 { SignatureConstant.XCaTimestamp, "1646182350909" },
                 { SignatureConstant.XCaNonce, "1002" },
                 { SignatureConstant.ContentMD5, "eeeeeeeee" },
+                { SignatureConstant.ContentType, "application/json; charset=utf-8" }
             }
         };
         var textGenerator = new SignatureTextGenerator();
@@ -35,12 +36,14 @@ public class SignatureTextGeneratorTest
         {
             Assert.AreEqual(@"GET
 application/json; charset=utf-8
-
+eeeeeeeee
+application/json; charset=utf-8
 
 x-ca-key:123123
 x-ca-nonce:1002
 x-ca-timestamp:1646182350909
-/sms/send?age=2&name=w&query=w&w=c".Replace("\r", ""), text.ToString());
+/sms/send?age=2&name=w&query=w&w=c
+".Replace("\r", ""), text.ToString());
             Assert.IsTrue(text.IsSuccess);
         }
     }

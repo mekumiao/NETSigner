@@ -65,7 +65,7 @@ public class SignatureValidatorTest
         var application = GetWebApplication();
         var client = application.CreateClient();
 
-        client.DefaultRequestHeaders.Date = DateTimeOffset.Now;
+        client.DefaultRequestHeaders.Date = new DateTime(2022, 3, 2);
         client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(MediaTypeNames.Application.Json)
         {
             CharSet = "charset=utf-8"
@@ -78,7 +78,7 @@ public class SignatureValidatorTest
         content.Headers.Add(SignatureConstant.XCaTimestamp, "123123");
         content.Headers.Add(SignatureConstant.XCaNonce, "10000");
         content.Headers.Add(SignatureConstant.XCaSignatureMethod, "HmacSHA256");
-        content.Headers.Add(SignatureConstant.XCaSignature, "x");
+        content.Headers.Add(SignatureConstant.XCaSignature, "pqbMBJ7P6sR6+fCz2rDjsxp1QuwWEZTsxUDdfaNN0kU=");
 
         var resp = await client.PostAsync("/sign", content);
         Assert.IsTrue(resp.IsSuccessStatusCode);
