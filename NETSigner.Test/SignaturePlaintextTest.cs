@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace NETSigner.Test;
 
 [TestClass]
-public class SignatureTextTest
+public class SignaturePlaintextTest
 {
     private IDictionary<string, string?> _headers = new Dictionary<string, string?>()
     {
@@ -32,11 +32,14 @@ public class SignatureTextTest
     public void TryParse(string path, string method)
     {
         var result = new VerifyResult();
-        if (SignatureText.TryParse(path: path, method: method, headers: _headers, result: result, signatureText: out var signatureText))
+        if (SignaturePlaintext.TryParse(path: path, method: method, headers: _headers, result: result, plaintext: out var plaintext))
         {
+            Assert.AreEqual(plaintext.Key, "123123");
+            Assert.AreEqual(plaintext.Nonce, "10000");
+            Assert.AreEqual(plaintext.Timestamp, 1646182350909);
             Assert.IsTrue(result.IsSuccess);
-            signatureText.Querys = _querys;
-            signatureText.Forms = _forms;
+            plaintext.Querys = _querys;
+            plaintext.Forms = _forms;
             var signature =
     @$"{method}
 application/json; charset=utf-8
@@ -47,7 +50,7 @@ x-ca-nonce:10000
 x-ca-timestamp:1646182350909
 {path}?age=12&name=xiaowang&qq&query=w&sex=0
 ";
-            Assert.AreEqual(signature.Replace("\r", ""), signatureText.ToString());
+            Assert.AreEqual(signature.Replace("\r", ""), plaintext.ToString());
         }
     }
 }

@@ -25,12 +25,16 @@ public class SignatureValidator
     public VerifyResult Verify(HttpRequestModel requestModel)
     {
         var result = new VerifyResult();
-        if (SignatureHeader.TryParse(requestModel.Headers, result, out var signatureHeader))
+        if (requestModel.Headers.TryGetValue(SignatureConstant.XCaSignature, out var signature) && !string.IsNullOrWhiteSpace(signature))
         {
-            if (SignatureText.TryParse(requestModel.Path, requestModel.Method, requestModel.Headers, result, out var signatureText))
+            if (SignaturePlaintext.TryParse(requestModel.Path, requestModel.Method, requestModel.Headers, result, out var plaintext))
             {
-                _ = VerifyTimestamp(signatureHeader.Timestamp, result) && VerifyNonce(signatureHeader.Nonce, result) && VerifySignature(signatureHeader, signatureText, result);
+                _ = VerifyTimestamp(plaintext.Timestamp, result) && VerifyNonce(plaintext.Nonce, result) && VerifySignature(signature, plaintext, result);
             }
+        }
+        else
+        {
+            result.ErrorMessage = $"Missing parameter, The {SignatureConstant.XCaSignature} is required";
         }
         return result;
     }
@@ -65,12 +69,12 @@ public class SignatureValidator
         return true;
     }
 
-    protected bool VerifySignature(SignatureHeader signatureHeader, SignatureText signatureText, VerifyResult result)
+    protected bool VerifySignature(string signature, SignaturePlaintext plaintext, VerifyResult result)
     {
-        var signatureGenerator = _signatureGeneratorRegistry.GetGenerator(signatureHeader.SignatureMethod);
-        var signatureTextString = signatureText.ToString();
-        var signatureString = signatureGenerator.Signature(_sKGetter.GetSK(signatureHeader.Key), signatureTextString);
-        if (signatureString == signatureHeader.Signature)
+        var signatureGenerator = _signatureGeneratorRegistry.GetGenerator(plaintext.SignatureMethod);
+        var signatureTextString = plaintext.ToString();
+        var signatureString = signatureGenerator.Signature(_sKGetter.GetSK(plaintext.Key), signatureTextString);
+        if (signatureString == signature)
         {
             return true;
         }

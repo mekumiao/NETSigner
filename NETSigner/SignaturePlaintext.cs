@@ -3,9 +3,13 @@ using System.Text;
 
 namespace NETSigner;
 
-public class SignatureText
+public class SignaturePlaintext
 {
     private static SignatureHeaders _signatureHeaders = new();
+    public long Timestamp { get; private set; }
+    public string Key { get; private set; } = string.Empty;
+    public string Nonce { get; private set; } = string.Empty;
+    public string? SignatureMethod { get; private set; }
     public string Path { get; private set; }
     public string Method { get; private set; }
     public string? Accept { get; private set; }
@@ -16,7 +20,7 @@ public class SignatureText
     public IDictionary<string, string?>? Forms { get; set; }
     private readonly IDictionary<string, string?> _headers;
 
-    protected SignatureText(string path, string method, IDictionary<string, string?> headers)
+    protected SignaturePlaintext(string path, string method, IDictionary<string, string?> headers)
     {
         Path = path;
         Method = method;
@@ -29,9 +33,9 @@ public class SignatureText
                       .ToDictionary(x => x.Key, y => y.Value);
     }
 
-    public static bool TryParse(string path, string method, IDictionary<string, string?> headers, VerifyResult result, [NotNullWhen(true)] out SignatureText? signatureText)
+    public static bool TryParse(string path, string method, IDictionary<string, string?> headers, VerifyResult result, [NotNullWhen(true)] out SignaturePlaintext? plaintext)
     {
-        signatureText = null;
+        plaintext = null;
 
         if (!headers.ContainsKey(SignatureConstant.XCaKey))
         {
@@ -53,31 +57,66 @@ public class SignatureText
 
         if (headers.TryGetValue(SignatureConstant.XCaSignatureHeaders, out var signatureHeaders) && !string.IsNullOrWhiteSpace(signatureHeaders))
         {
-            signatureText = new SignatureText(path, method, Intersect(headers, SignatureHeaders.Parse(signatureHeaders)));
+            plaintext = new SignaturePlaintext(path, method, Intersect(headers, SignatureHeaders.Parse(signatureHeaders)));
         }
         else
         {
-            signatureText = new SignatureText(path, method, Intersect(headers, _signatureHeaders));
+            plaintext = new SignaturePlaintext(path, method, Intersect(headers, _signatureHeaders));
+        }
+
+        if (!string.IsNullOrWhiteSpace(headers[SignatureConstant.XCaKey]))
+        {
+            plaintext.Key = headers[SignatureConstant.XCaKey]!;
+        }
+        else
+        {
+            result.ErrorMessage = $"Invalid parameter, The {SignatureConstant.XCaKey} is Invalid";
+            return false;
+        }
+
+        if (!string.IsNullOrWhiteSpace(headers[SignatureConstant.XCaNonce]))
+        {
+            plaintext.Nonce = headers[SignatureConstant.XCaNonce]!;
+        }
+        else
+        {
+            result.ErrorMessage = $"Invalid parameter, The {SignatureConstant.XCaNonce} is Invalid";
+            return false;
+        }
+
+        if (long.TryParse(headers[SignatureConstant.XCaTimestamp], out var timestamp))
+        {
+            plaintext.Timestamp = timestamp;
+        }
+        else
+        {
+            result.ErrorMessage = $"Invalid parameter, The {SignatureConstant.XCaTimestamp} is Invalid";
+            return false;
+        }
+
+        if (headers.TryGetValue(SignatureConstant.XCaSignatureMethod, out var signatureMethod))
+        {
+            plaintext.SignatureMethod = signatureMethod;
         }
 
         if (headers.TryGetValue(SignatureConstant.ContentMD5, out var md5))
         {
-            signatureText.ContentMD5 = md5;
+            plaintext.ContentMD5 = md5;
         }
 
         if (headers.TryGetValue(SignatureConstant.ContentType, out var type))
         {
-            signatureText.ContentType = type;
+            plaintext.ContentType = type;
         }
 
         if (headers.TryGetValue(SignatureConstant.Date, out var date))
         {
-            signatureText.Date = date;
+            plaintext.Date = date;
         }
 
         if (headers.TryGetValue(SignatureConstant.Accept, out var accept))
         {
-            signatureText.Accept = accept;
+            plaintext.Accept = accept;
         }
 
         return true;
