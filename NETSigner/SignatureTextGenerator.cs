@@ -29,12 +29,13 @@ public class SignatureTextGenerator
             return false;
         }
 
-        var text = new SignatureText();
-
-        text.Path = model.Path;
-        text.Form = model.Form;
-        text.Query = model.Query;
-        text.HTTPMethod = model.Method;
+        var text = new SignatureText
+        {
+            Path = model.Path,
+            Form = model.Form,
+            Query = model.Query,
+            HTTPMethod = model.Method
+        };
 
         if (model.Headers.TryGetValue(SignatureConstant.ContentMD5, out var md5))
         {
@@ -87,27 +88,4 @@ public class SignatureTextGenerator
         signatureText = text;
         return true;
     }
-
-    private bool RequiredHeader(IDictionary<string, string?> headers, string key, VerifyResult result, Action<string> action)
-    {
-        if (headers.TryGetValue(key, out var value))
-        {
-            if (!string.IsNullOrWhiteSpace(value))
-            {
-                action(value);
-                return true;
-            }
-            else
-            {
-                result.ErrorMessage = $"Invalid parameter, The {key} is Invalid";
-                return false;
-            }
-        }
-        else
-        {
-            result.ErrorMessage = $"Missing parameter, The {key} is required";
-            return false;
-        }
-    }
-
 }

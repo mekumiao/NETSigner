@@ -16,7 +16,7 @@ namespace NETSigner.Test;
 [TestClass]
 public class SignatureValidatorTest
 {
-    protected WebApplicationFactory<Program> GetWebApplication()
+    protected static WebApplicationFactory<Program> GetWebApplication()
     {
         var application = new WebApplicationFactory<Program>().WithWebHostBuilder(configuration => configuration.ConfigureServices(services =>
         {

@@ -7,7 +7,7 @@ public class SignatureGeneratorRegistry
 {
     private static readonly ISignatureGenerator _signatureGenerator = new HmacSHA256SignatureGenerator();
 
-    private IDictionary<string, ISignatureGenerator> _dictGenerators;
+    private readonly IDictionary<string, ISignatureGenerator> _dictGenerators;
 
     public SignatureGeneratorRegistry()
     {
@@ -20,9 +20,28 @@ public class SignatureGeneratorRegistry
         };
     }
 
+    private static IEnumerable<TSource> DistinctByIterator<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> keySelector, IEqualityComparer<TKey>? comparer)
+    {
+        using IEnumerator<TSource> enumerator = source.GetEnumerator();
+
+        if (enumerator.MoveNext())
+        {
+            var set = new HashSet<TKey>(7, comparer);
+            do
+            {
+                TSource element = enumerator.Current;
+                if (set.Add(keySelector(element)))
+                {
+                    yield return element;
+                }
+            }
+            while (enumerator.MoveNext());
+        }
+    }
+
     public SignatureGeneratorRegistry(IEnumerable<ISignatureGenerator> generators)
     {
-        _dictGenerators = generators.DistinctBy(x => x.Name).ToDictionary(x => x.Name);
+        _dictGenerators = DistinctByIterator(generators, x => x.Name, null).ToDictionary(x => x.Name);
     }
 
     public ISignatureGenerator GetGenerator(string? name)

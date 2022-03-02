@@ -10,10 +10,19 @@ public class SignatureHeaderGeneratorTest
     public void TryGetSignatureHeader()
     {
         var result = new VerifyResult();
-        var model = new HttpRequestModel
+        var header = new Dictionary<string, string?>()
         {
-            Method = "GET",
+            { SignatureConstant.Accept, "application/json; charset=utf-8" },
+            { SignatureConstant.XCaKey, "123123" },
+            { SignatureConstant.XCaTimestamp, "1646182350909" },
+            { SignatureConstant.XCaNonce, "1002" },
+            { SignatureConstant.ContentMD5, "eeeeeeeee" },
+            { SignatureConstant.XCaSignature, "eeeeeeeee" },
+        };
+        var model = new HttpRequestModel(header)
+        {
             Path = "/sms/send",
+            Method = "GET",
             Query = new Dictionary<string, string?>()
             {
                 { "w", "c" },
@@ -21,23 +30,14 @@ public class SignatureHeaderGeneratorTest
                 { "age", "2" },
                 { "name", "w" },
             },
-            Headers = new Dictionary<string, string?>()
-            {
-                { SignatureConstant.Accept, "application/json; charset=utf-8" },
-                { SignatureConstant.XCaKey, "123123" },
-                { SignatureConstant.XCaTimestamp, "1646182350909" },
-                { SignatureConstant.XCaNonce, "1002" },
-                { SignatureConstant.ContentMD5, "eeeeeeeee" },
-                { SignatureConstant.XCaSignature, "eeeeeeeee" },
-            }
         };
         var headerGenerator = new SignatureHeaderGenerator();
-        if (headerGenerator.TryGetSignatureHeader(model, result, out var header))
+        if (headerGenerator.TryGetSignatureHeader(model, result, out var hd))
         {
-            Assert.AreEqual(header.Key, "123123");
-            Assert.AreEqual(header.Nonce, "1002");
-            Assert.AreEqual(header.Timestamp, 1646182350909);
-            Assert.IsTrue(header.IsSuccess);
+            Assert.AreEqual(hd.Key, "123123");
+            Assert.AreEqual(hd.Nonce, "1002");
+            Assert.AreEqual(hd.Timestamp, 1646182350909);
+            Assert.IsTrue(hd.IsSuccess);
         }
     }
 }

@@ -10,7 +10,16 @@ public class SignatureTextGeneratorTest
     public void TryGetSignatureText()
     {
         var result = new VerifyResult();
-        var model = new HttpRequestModel
+        var header = new Dictionary<string, string?>()
+        {
+            { SignatureConstant.Accept, "application/json; charset=utf-8" },
+            { SignatureConstant.XCaKey, "123123" },
+            { SignatureConstant.XCaTimestamp, "1646182350909" },
+            { SignatureConstant.XCaNonce, "1002" },
+            { SignatureConstant.ContentMD5, "eeeeeeeee" },
+            { SignatureConstant.ContentType, "application/json; charset=utf-8" }
+        };
+        var model = new HttpRequestModel(header)
         {
             Method = "GET",
             Path = "/sms/send",
@@ -21,15 +30,6 @@ public class SignatureTextGeneratorTest
                 { "age", "2" },
                 { "name", "w" },
             },
-            Headers = new Dictionary<string, string?>()
-            {
-                { SignatureConstant.Accept, "application/json; charset=utf-8" },
-                { SignatureConstant.XCaKey, "123123" },
-                { SignatureConstant.XCaTimestamp, "1646182350909" },
-                { SignatureConstant.XCaNonce, "1002" },
-                { SignatureConstant.ContentMD5, "eeeeeeeee" },
-                { SignatureConstant.ContentType, "application/json; charset=utf-8" }
-            }
         };
         var textGenerator = new SignatureTextGenerator();
         if (textGenerator.TryGetSignatureText(model, result, out var text))

@@ -35,15 +35,15 @@ public class NETSignerMiddleware
         }
     }
 
-    private HttpRequestModel GetRequestModel(HttpRequest request)
+    private static HttpRequestModel GetRequestModel(HttpRequest request)
     {
-        var model = new HttpRequestModel
+        var headers = request.Headers.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault());
+        var model = new HttpRequestModel(headers)
         {
-            Path = request.Path,
             Method = request.Method,
+            Path = request.Path,
+            Query = request.Query.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault())
         };
-        model.Headers = request.Headers.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault());
-        model.Query = request.Query.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault());
         if (request.Method == "POST" && request.HasFormContentType)
         {
             model.Form = request.Form.ToDictionary(x => x.Key, x => x.Value.FirstOrDefault());
