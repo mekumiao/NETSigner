@@ -35,7 +35,11 @@ public class SignatureTextGenerator
         text.Form = model.Form;
         text.Query = model.Query;
         text.HTTPMethod = model.Method;
-        text.ContentMD5 = model.ContentMD5;
+
+        if (model.Headers.TryGetValue(SignatureConstant.ContentMD5, out var md5))
+        {
+            text.ContentMD5 = md5;
+        }
 
         if (model.Headers.TryGetValue(SignatureConstant.ContentType, out var type))
         {

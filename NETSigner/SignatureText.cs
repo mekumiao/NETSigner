@@ -66,6 +66,7 @@ public class SignatureText
             }
             builder.Remove(builder.Length - 1, 1);
         }
+        builder.Append('\n');
         return builder.ToString();
     }
 }

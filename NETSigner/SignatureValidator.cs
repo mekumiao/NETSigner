@@ -43,24 +43,32 @@ public class SignatureValidator
 
     protected bool VerifyTimestamp(long timestamp, VerifyResult result)
     {
-        var left = DateTimeOffset.Now.Add(-_signatureValidatorOptions.TimestampValidationOffset).ToUnixTimeMilliseconds();
-        var right = DateTimeOffset.Now.Add(_signatureValidatorOptions.TimestampValidationOffset).ToUnixTimeMilliseconds();
-        if (timestamp >= left && timestamp <= right)
+        if (_signatureValidatorOptions.IsValidateTimestamp)
         {
-            return true;
+            var left = DateTimeOffset.Now.Add(-_signatureValidatorOptions.TimestampValidationOffset).ToUnixTimeMilliseconds();
+            var right = DateTimeOffset.Now.Add(_signatureValidatorOptions.TimestampValidationOffset).ToUnixTimeMilliseconds();
+            if (timestamp >= left && timestamp <= right)
+            {
+                return true;
+            }
+            result.ErrorMessage = "Invalid Timestamp, The timestamp has expired";
+            return false;
         }
-        result.ErrorMessage = "Invalid Timestamp, The timestamp has expired";
-        return false;
+        return true;
     }
 
     protected bool VerifyNonce(string nonce, VerifyResult result)
     {
-        if (_nonceRecorder.Record(nonce, _signatureValidatorOptions.TimestampValidationOffset))
+        if (_signatureValidatorOptions.IsValidateNonce)
         {
-            return true;
+            if (_nonceRecorder.Record(nonce, _signatureValidatorOptions.TimestampValidationOffset))
+            {
+                return true;
+            }
+            result.ErrorMessage = "Invalid Nonce, Nonce has been used";
+            return false;
         }
-        result.ErrorMessage = "Invalid Nonce, Nonce has been used";
-        return false;
+        return true;
     }
 
     protected bool VerifySignature(SignatureHeader signatureHeader, SignatureText signatureText, VerifyResult result)

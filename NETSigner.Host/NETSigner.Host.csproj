@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NETSigner\NETSigner.csproj" />
+    <ProjectReference Include="..\NETSigner.AspNetCore\NETSigner.AspNetCore.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

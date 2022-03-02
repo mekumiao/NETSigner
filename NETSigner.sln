@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NETSigner.Test", "NETSigner
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NETSigner.Host", "NETSigner.Host\NETSigner.Host.csproj", "{DBD4E255-BEF2-4BF5-A9BD-759503F8349A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NETSigner.AspNetCore", "NETSigner.AspNetCore\NETSigner.AspNetCore.csproj", "{6F6F1C0C-3C57-48D6-8E40-9707687D5955}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{DBD4E255-BEF2-4BF5-A9BD-759503F8349A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBD4E255-BEF2-4BF5-A9BD-759503F8349A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBD4E255-BEF2-4BF5-A9BD-759503F8349A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F6F1C0C-3C57-48D6-8E40-9707687D5955}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F6F1C0C-3C57-48D6-8E40-9707687D5955}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F6F1C0C-3C57-48D6-8E40-9707687D5955}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F6F1C0C-3C57-48D6-8E40-9707687D5955}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
