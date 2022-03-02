@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NETSigner", "NETSigner\NETSigner.csproj", "{69F497B3-BCED-4F84-B05F-D416223D4C1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NETSigner.Test", "NETSigner.Test\NETSigner.Test.csproj", "{460B72BD-8803-43C0-A7F5-FC2A1EAECCE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NETSigner.Host", "NETSigner.Host\NETSigner.Host.csproj", "{DBD4E255-BEF2-4BF5-A9BD-759503F8349A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69F497B3-BCED-4F84-B05F-D416223D4C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69F497B3-BCED-4F84-B05F-D416223D4C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69F497B3-BCED-4F84-B05F-D416223D4C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69F497B3-BCED-4F84-B05F-D416223D4C1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{460B72BD-8803-43C0-A7F5-FC2A1EAECCE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{460B72BD-8803-43C0-A7F5-FC2A1EAECCE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{460B72BD-8803-43C0-A7F5-FC2A1EAECCE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{460B72BD-8803-43C0-A7F5-FC2A1EAECCE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBD4E255-BEF2-4BF5-A9BD-759503F8349A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBD4E255-BEF2-4BF5-A9BD-759503F8349A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBD4E255-BEF2-4BF5-A9BD-759503F8349A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBD4E255-BEF2-4BF5-A9BD-759503F8349A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
