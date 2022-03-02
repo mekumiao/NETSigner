@@ -13,7 +13,25 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>1.0.1</Version>
+    <IsPackable>true</IsPackable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageTags>.netcore,signer</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <Authors>timer</Authors>
+    <Description>NETSigner库的AspNetCore扩展，快速集成NETSigner功能</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://gitee.com/pangtimer/NETSigner.git</PackageProjectUrl>
+    <RepositoryUrl>https://gitee.com/pangtimer/NETSigner.git</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>

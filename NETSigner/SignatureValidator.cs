@@ -7,23 +7,17 @@ public class SignatureValidator
 {
     private readonly ISKGetter _sKGetter;
     private readonly INonceRecorder _nonceRecorder;
-    private readonly SignatureTextGenerator _signatureTextGenerator;
-    private readonly SignatureHeaderGenerator _signatureHeaderGenerator;
     private readonly SignatureGeneratorRegistry _signatureGeneratorRegistry;
     private readonly SignatureValidatorOptions _signatureValidatorOptions;
 
     public SignatureValidator(
         ISKGetter sKGetter,
         INonceRecorder nonceRecorder,
-        SignatureTextGenerator signatureTextGenerator,
-        SignatureHeaderGenerator signatureHeaderGenerator,
         SignatureGeneratorRegistry signatureGeneratorRegistry,
         SignatureValidatorOptions signatureValidatorOptions)
     {
         _sKGetter = sKGetter;
         _nonceRecorder = nonceRecorder;
-        _signatureTextGenerator = signatureTextGenerator;
-        _signatureHeaderGenerator = signatureHeaderGenerator;
         _signatureGeneratorRegistry = signatureGeneratorRegistry;
         _signatureValidatorOptions = signatureValidatorOptions;
     }
@@ -31,9 +25,9 @@ public class SignatureValidator
     public VerifyResult Verify(HttpRequestModel requestModel)
     {
         var result = new VerifyResult();
-        if (_signatureHeaderGenerator.TryGetSignatureHeader(requestModel, result, out var signatureHeader))
+        if (SignatureHeader.TryParse(requestModel.Headers, result, out var signatureHeader))
         {
-            if (_signatureTextGenerator.TryGetSignatureText(requestModel, result, out var signatureText))
+            if (SignatureText.TryParse(requestModel.Path, requestModel.Method, requestModel.Headers, result, out var signatureText))
             {
                 _ = VerifyTimestamp(signatureHeader.Timestamp, result) && VerifyNonce(signatureHeader.Nonce, result) && VerifySignature(signatureHeader, signatureText, result);
             }

@@ -12,8 +12,6 @@ public static class NETSignerServiceExtensions
         services.TryAddSingleton(options);
         services.TryAddSingleton<ISKGetter, DefaultSKGetter>();
         services.TryAddSingleton<INonceRecorder, DefaultNonceRecorder>();
-        services.TryAddSingleton<SignatureTextGenerator>();
-        services.TryAddSingleton<SignatureHeaderGenerator>();
         services.TryAddSingleton<SignatureGeneratorRegistry>();
         services.TryAddSingleton<SignatureValidator>();
         return services;
